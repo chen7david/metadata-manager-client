@@ -9,6 +9,7 @@
     </v-app-bar>
     <v-col cols="12">
       <v-row justify="space-around">
+        {{search}}
         <poster
           ref="posters"
           v-for="item of items"
@@ -21,12 +22,9 @@
           @select="select"
           @deselect="deselect"
           iconSize="23"
-          spinner="blue"
         >
           <template v-slot:tr="{prop: {iconsize, load}}">
-            <v-icon :size="iconsize" @click="load(add,{item})">
-                mdi-plus
-            </v-icon>
+            <v-icon :size="iconsize" @click="load(add,{item})">mdi-plus</v-icon>
           </template>
 
           <template v-slot:body>
@@ -70,6 +68,7 @@ export default {
   data: () => ({
     hoverPlay:false,
     showToolbar: false,
+    search: null,
     items: [],
     selected: [],
   }),
@@ -97,16 +96,16 @@ export default {
       return await this.$http.get('/movies')
     },
 
-    hideAll(){
-      this.$refs.posters.filter(e => e.isSelected).map(p => p.hide())
-    },
-
     selectAll(){
       this.$refs.posters.map(p => p.select())
     },
 
     deselectAll(){
       this.$refs.posters.map(p => p.deselect())
+    },
+
+    hideAll(){
+      this.$refs.posters.filter(e => e.isSelected).map(p => p.hide())
     },
 
     showAll(){
@@ -122,6 +121,7 @@ export default {
   async mounted(){
     const { data } = await this.getMovies()
     this.items = data
-  } 
+    this.$root.$on('search', e => this.search = e)
+  }
 }
 </script>

@@ -46,6 +46,22 @@
         >
             <v-app-bar-nav-icon @click="drawer = !drawer"/>
             <v-spacer></v-spacer>
+            <v-text-field
+                ref="searchbox"
+                v-if="isSearchable"
+                class="mt-6 mx-3 shrink"
+                solo
+                dense
+                filled
+                rounded
+                clearable
+                :prepend-inner-icon="external ? 'mdi-earth' : 'mdi-fire'"
+                append-inner-icon="mdi-map-marker"
+                @click:prepend-inner="external = !external"
+                placeholder="Search..."
+                v-model="phrase"
+            >
+            </v-text-field>
             <v-btn tile router to="/login">Login</v-btn>
             <v-btn tile router to="/register">Register</v-btn>
         </v-app-bar>
@@ -59,6 +75,9 @@ export default {
         isLoading: false,
         drawer: false,
         dark: true,
+        external: false,
+        isSearchable: true,
+        phrase: '',
         links: [
             {
                 name: 'Movies',
@@ -69,11 +88,6 @@ export default {
                 name: 'Shows',
                 icon: 'mdi-monitor',
                 to: '/shows'
-            },
-            {
-                name: 'Search',
-                icon: 'mdi-magnify',
-                to: '/search'
             },
             {
                 name: 'Documentation',
@@ -87,6 +101,10 @@ export default {
     watch: {
       dark(dark){
         this.$vuetify.theme.dark = dark
+      },
+      phrase(phrase){
+          this.$root.$emit('search',phrase)
+        //   console.log({phrase})
       }
     }
 }
