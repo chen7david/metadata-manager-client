@@ -14,7 +14,7 @@
           v-for="item of items"
           :key="item.id"
           :item="item"
-          src="http://image.tmdb.org/t/p/original/6YPzBcMH0aPNTvdXNCDLY0zdE1g.jpg"
+          :src="imgURL(item.poster_path)"
           width="180"
           :title="item.name"
           :date="item.date"
@@ -46,11 +46,11 @@
           <template v-slot:footer>
               <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                      <div v-on="on" v-bind="attrs" class="font-weight-medium text-truncate">{{item.name}}</div>
+                      <div v-on="on" v-bind="attrs" class="font-weight-medium text-truncate">{{item.title}}</div>
                   </template>
-                  <span>{{item.name}}</span>
+                  <span>{{item.title}}</span>
               </v-tooltip>
-              <div class="blue-grey--text">{{year(item.date)}}</div>
+              <div class="blue-grey--text">{{year(item.release_date)}}</div>
           </template>
         </poster>
       </v-row>
@@ -70,12 +70,7 @@ export default {
   data: () => ({
     hoverPlay:false,
     showToolbar: false,
-    items: [
-      { id: 1, name: 'Aname', date:'2021-09-23'},
-      { id: 2, name: 'Bname', date:'2021-09-23'},
-      { id: 3, name: 'Cname', date:'2021-09-23'},
-      { id: 4, name: 'Dname', date:'2021-09-23'},
-    ],
+    items: [],
     selected: [],
   }),
   watch: {
@@ -95,6 +90,10 @@ export default {
 
     async add({item}){
       console.log(item)
+      return await this.$http.get('/movies')
+    },
+
+    async getMovies(){
       return await this.$http.get('/movies')
     },
 
@@ -118,6 +117,11 @@ export default {
         this.$refs.posters.filter(e => e.isSelected).map(p => p.load(this.add,{item:5}))
     },
     year(date){ return date ? new Date(date).getFullYear().toString() : '' },
-  }
+    imgURL(uri){ return this.$config.api.tmdb.imgURL + uri }
+  },
+  async mounted(){
+    const { data } = await this.getMovies()
+    this.items = data
+  } 
 }
 </script>
