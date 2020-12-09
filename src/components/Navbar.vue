@@ -104,7 +104,9 @@ export default {
       },
       phrase(phrase){
           this.$root.$emit('search',phrase)
-        //   console.log({phrase})
+      },
+      external(boolean){
+          this.$root.$emit('external', boolean)
       }
     }
 }

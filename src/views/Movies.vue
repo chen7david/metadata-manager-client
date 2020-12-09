@@ -71,6 +71,7 @@ export default {
     showToolbar: false,
     search: null,
     items: [],
+    exitems: [],
     selected: [],
   }),
   computed: {
@@ -101,6 +102,10 @@ export default {
     async getMovies(){
       return await this.$http.get('/movies')
     },
+    
+    async searchTmdbMovies(key){
+      return await this.$http.get(`/movies?source=tmdb&search=${key}`)
+    },
 
     selectAll(){
       this.$refs.posters.map(p => p.select())
@@ -127,6 +132,7 @@ export default {
   async mounted(){
     const { data } = await this.getMovies()
     this.items = data
+
     this.$root.$on('search', key => this.$refs.posters.map(e => {
         e.keyphrase.includes(key) ? e.show() : e.hide()
     }))
