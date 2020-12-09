@@ -3,7 +3,7 @@
     <v-app-bar fixed v-if="showToolbar">
       <v-btn text tile @click="selectAll">select all</v-btn>
       <v-btn text tile @click="deselectAll">deselect all</v-btn>
-      <v-btn text tile @click="hideAll">hide</v-btn>
+      <v-btn text tile @click="refreshSelected">refresh</v-btn>
       <v-btn text tile @click="showAll">show</v-btn>
       <v-btn text tile @click="addAll">run all</v-btn>
     </v-app-bar>
@@ -16,6 +16,7 @@
           v-for="item of items"
           :key="item.id"
           :item="item"
+          :id="item.id"
           :keyphrase="item.keyphrase"
           :src="imgURL(item.poster_path)"
           width="138"
@@ -40,8 +41,8 @@
             <v-icon :size="iconsize">mdi-pencil</v-icon>
           </template>
 
-          <template v-slot:br="{prop: {iconsize}}">
-            <v-icon :size="iconsize">mdi-dots-vertical</v-icon>
+          <template v-slot:br="{prop: {iconsize, load}}">
+            <v-icon :size="iconsize" @click="load(refresh,{item})">mdi-refresh</v-icon>
           </template>
           <template v-slot:footer>
               <v-tooltip top>
@@ -106,6 +107,17 @@ export default {
     
     async searchTmdbMovies(key){
       return await this.$http.get(`/movies?source=tmdb&search=${key}`)
+    },
+
+    async refresh({item}){
+        const { data } = await this.$http.get(`/movies/${item.id}?source=tmdb`)
+        return await this.$http.patch(`/movies/${item.id}`, data)
+    },
+
+    refreshSelected(){
+        this.$refs.posters.filter(e => e.isSelected).map(p => {
+            p.load(this.refresh, {item: {id: p.id}})
+        })
     },
 
     selectAll(){

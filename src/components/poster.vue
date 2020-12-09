@@ -59,6 +59,7 @@ export default {
     props: {
         item: null,
         keyphrase: null,
+        id: null,
         src: null,
         width: null,
         ratio: null, 
