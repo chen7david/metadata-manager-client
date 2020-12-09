@@ -57,7 +57,7 @@ export default {
     name: 'Navbar',
     data: () => ({
         isLoading: false,
-        drawer: true,
+        drawer: false,
         dark: true,
         links: [
             {
