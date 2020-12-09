@@ -27,21 +27,6 @@
           <template v-slot:tr="{prop: {iconsize, load}}">
             <v-icon :size="iconsize" @click="load(add,{item})">mdi-plus</v-icon>
           </template>
-
-          <template v-slot:body>
-            <v-col cols="12" class="text-center" align-self="center">
-                <v-icon v-if="!hoverPlay" @mouseover="hoverPlay = true" @mouseleave="hoverPlay = false" size="60">mdi-play-circle-outline</v-icon>
-                <v-icon v-if="hoverPlay" @mouseover="hoverPlay = true" @mouseleave="hoverPlay = false"  size="60">mdi-play-circle</v-icon>
-            </v-col>
-          </template>
-
-          <template v-slot:bl="{prop: {iconsize}}">
-            <v-icon :size="iconsize">mdi-pencil</v-icon>
-          </template>
-
-          <template v-slot:br="{prop: {iconsize}}">
-            <v-icon :size="iconsize">mdi-dots-vertical</v-icon>
-          </template>
           <template v-slot:footer>
               <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
@@ -96,11 +81,7 @@ export default {
 
     async add({item}){
       console.log(item)
-      return await this.$http.get('/movies')
-    },
-
-    async getMovies(){
-      return await this.$http.get('/movies')
+      return await this.$http.post('/movies', item)
     },
     
     async searchTmdbMovies(key){
@@ -115,14 +96,6 @@ export default {
       this.$refs.posters.map(p => p.deselect())
     },
 
-    hideAll(){
-      this.$refs.posters.filter(e => e.isSelected).map(p => p.hide())
-    },
-
-    showAll(){
-      this.$refs.posters.filter(e => e.isSelected).map(p => p.show())
-    },
-
     addAll(){
         this.$refs.posters.filter(e => e.isSelected).map(p => p.load(this.add,{item:5}))
     },
@@ -130,13 +103,10 @@ export default {
     imgURL(uri){ return this.$config.api.tmdb.imgURL + uri }
   },
   async mounted(){
-    const { data } = await this.getMovies()
-    this.items = data
-
-    this.$root.$on('search', key => this.$refs.posters.map(e => {
-        if(!key) return this.$refs.posters.map(e => e.show())
-        e.keyphrase.includes(key) ? e.show() : e.hide()
-    }))
+    this.$root.$on('dosearch', async key => {
+        const { data } = await this.searchTmdbMovies(key)
+        this.items = data
+    })
   }
 }
 </script>

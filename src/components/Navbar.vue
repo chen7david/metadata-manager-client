@@ -55,9 +55,10 @@
                 filled
                 rounded
                 clearable
-                :prepend-inner-icon="external ? 'mdi-earth' : 'mdi-fire'"
+                prepend-inner-icon="mdi-fire"
                 append-inner-icon="mdi-map-marker"
-                @click:prepend-inner="external = !external"
+                @click:prepend-inner="doSearch"
+                @keyup.enter="doSearch"
                 placeholder="Search..."
                 v-model="phrase"
             >
@@ -75,7 +76,6 @@ export default {
         isLoading: false,
         drawer: false,
         dark: true,
-        external: false,
         isSearchable: true,
         phrase: '',
         links: [
@@ -90,6 +90,11 @@ export default {
                 to: '/shows'
             },
             {
+                name: 'Search',
+                icon: 'mdi-magnify',
+                to: '/search'
+            },
+            {
                 name: 'Documentation',
                 icon: 'mdi-file',
                 to: '/documentation'
@@ -97,6 +102,10 @@ export default {
         ]
     }),
     methods: {
+        doSearch(){
+            console.log('dosearch')
+            this.$root.$emit('dosearch', this.phrase)
+        }, 
     },
     watch: {
       dark(dark){
@@ -105,9 +114,6 @@ export default {
       phrase(phrase){
           this.$root.$emit('search',phrase)
       },
-      external(boolean){
-          this.$root.$emit('external', boolean)
-      }
     }
 }
 </script>
