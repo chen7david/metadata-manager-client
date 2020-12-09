@@ -15,7 +15,7 @@
           :key="item.id"
           :item="item"
           :src="imgURL(item.poster_path)"
-          width="180"
+          width="138"
           :title="item.name"
           :date="item.date"
           @select="select"
