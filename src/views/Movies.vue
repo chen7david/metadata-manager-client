@@ -15,6 +15,7 @@
           v-for="item of items"
           :key="item.id"
           :item="item"
+          :keyphrase="item.keyphrase"
           :src="imgURL(item.poster_path)"
           width="138"
           :title="item.name"
@@ -72,6 +73,11 @@ export default {
     items: [],
     selected: [],
   }),
+  computed: {
+    localItems(){
+      return !this.search ? this.items : this.items.filter(i => i.keyphrase.includes(this.search))
+    }
+  },
   watch: {
     selected(){
       this.showToolbar = this.selected.length > 0
@@ -121,7 +127,9 @@ export default {
   async mounted(){
     const { data } = await this.getMovies()
     this.items = data
-    this.$root.$on('search', e => this.search = e)
+    this.$root.$on('search', key => this.$refs.posters.map(e => {
+        e.keyphrase.includes(key) ? e.show() : e.hide()
+    }))
   }
 }
 </script>

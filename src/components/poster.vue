@@ -58,6 +58,7 @@ export default {
     name: 'poster',
     props: {
         item: null,
+        keyphrase: null,
         src: null,
         width: null,
         ratio: null, 
