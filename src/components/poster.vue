@@ -46,7 +46,7 @@
                     </v-sheet>
                 </v-overlay>
             </v-card>
-            <v-card-subtitle class="text-left pa-0">
+            <v-card-subtitle v-if="!imgLoading" class="text-left pa-0">
                 <slot name="footer" v-bind:prop="{iconsize, load}"/>
             </v-card-subtitle>
         </v-card>

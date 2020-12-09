@@ -11,6 +11,7 @@
       <v-row justify="space-around">
         {{search}}
         <poster
+          class="my-2"
           ref="posters"
           v-for="item of items"
           :key="item.id"
@@ -25,7 +26,7 @@
           iconSize="23"
         >
           <template v-slot:tr="{prop: {iconsize, load}}">
-            <v-icon :size="iconsize" @click="load(add,{item})">mdi-plus</v-icon>
+            <v-icon :size="iconsize" @click="load(remove,{item})">mdi-close</v-icon>
           </template>
 
           <template v-slot:body>
@@ -94,9 +95,9 @@ export default {
       this.selected.splice(index, 1)
     },
 
-    async add({item}){
-      console.log(item)
-      return await this.$http.get('/movies')
+    async remove({item}){
+      this.$refs.posters.map(e => e.keyphrase == item.keyphrase ? e.hide() : false)
+      return await this.$http.delete(`/movies/${item.id}`)
     },
 
     async getMovies(){

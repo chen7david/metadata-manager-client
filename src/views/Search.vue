@@ -80,8 +80,8 @@ export default {
     },
 
     async add({item}){
-      console.log(item)
-      return await this.$http.post('/movies', item)
+      const {data} = await this.$http.get(`/movies/${item.id}?source=tmdb`)
+      return await this.$http.post('/movies', data)
     },
     
     async searchTmdbMovies(key){
