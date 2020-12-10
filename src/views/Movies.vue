@@ -4,7 +4,7 @@
       <v-btn text tile @click="selectAll">select all</v-btn>
       <v-btn text tile @click="deselectAll">deselect all</v-btn>
       <v-btn text tile @click="refreshSelected">refresh</v-btn>
-      <v-btn text tile @click="showAll">show</v-btn>
+      <v-btn text tile @click="dlImgSelected">coverart</v-btn>
       <v-btn text tile @click="addAll">run all</v-btn>
     </v-app-bar>
     <v-col cols="12">
@@ -42,6 +42,7 @@
           </template>
 
           <template v-slot:br="{prop: {iconsize, load}}">
+            <v-icon :size="iconsize" @click="load(dlImg,{item})">mdi-file-image</v-icon>
             <v-icon :size="iconsize" @click="load(refresh,{item})">mdi-refresh</v-icon>
           </template>
           <template v-slot:footer>
@@ -113,9 +114,20 @@ export default {
         return await this.$http.patch(`/movies/${item.id}`, data)
     },
 
+    async dlImg({item}){
+        const params = { dl:'coverart' }
+        await this.$http.get(`/movies/${item.id}`,{params})
+    },
+
     refreshSelected(){
         this.$refs.posters.filter(e => e.isSelected).map(p => {
             p.load(this.refresh, {item: {id: p.id}})
+        })
+    },
+
+    dlImgSelected(){
+        this.$refs.posters.filter(e => e.isSelected).map(p => {
+            p.load(this.dlImg, {item: {id: p.id}})
         })
     },
 

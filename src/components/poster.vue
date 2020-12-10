@@ -12,7 +12,7 @@
                         <!-- CARD IMAGE LOAD SPINNER -->
                         <v-row class="fill-height" align="center" justify="center">
                             <v-progress-circular 
-                                v-if="imgLoading" 
+                                v-if="imgLoading || isLoading" 
                                 indeterminate 
                                 :color="spinner_color"
                             ></v-progress-circular>
@@ -79,7 +79,7 @@ export default {
     computed: {
         aspect(){ return this.ratio || 2/3 },
         height(){ return this.width/this.aspect },
-        imgLoading(){ return !this.imgError && !this.imgDone || this.isLoading },
+        imgLoading(){ return !this.imgError && !this.imgDone },
         spinner_color(){ return this.spinner || 'orange' },
         iconsize(){ return this.iconSize || 20},
         outline(){ return this.hoverSelect ? ``:`-outline`},
