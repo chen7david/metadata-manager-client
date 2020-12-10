@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <v-app-bar fixed v-if="showToolbar">
+    <v-app-bar fixed v-if="toolbar">
       <v-btn text tile @click="selectAll">select all</v-btn>
       <v-btn text tile @click="deselectAll">deselect all</v-btn>
       <v-btn text tile @click="hideAll">hide</v-btn>
@@ -79,9 +79,13 @@ export default {
     selected: [],
   }),
   watch: {
-    selected(){
-      this.showToolbar = this.selected.length > 0
-    }
+    // selected(){
+    //   this.showToolbar = this.selected.length > 0
+    //   console.log({x:this.showToolbar, y: this.selected.length > 0})
+    // }
+  },
+  computed: {
+      toolbar(){ return this.selected.length > 0}
   },
   methods: {
     select(item){
