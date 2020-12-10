@@ -147,7 +147,7 @@ export default {
 
     this.$root.$on('search', key => this.$refs.posters.map(e => {
         if(!key) return this.$refs.posters.map(e => e.show())
-        e.keyphrase.includes(key) ? e.show() : e.hide()
+        e.keyphrase.includes(key.toLowerCase()) ? e.show() : e.hide()
     }))
   }
 }
