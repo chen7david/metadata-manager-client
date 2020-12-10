@@ -19,7 +19,7 @@
           :id="item.id"
           :keyphrase="item.keyphrase"
           :src="imgURL(item.poster_path)"
-          width="138"
+          width="135"
           :title="item.name"
           :date="item.date"
           @select="select"
@@ -60,7 +60,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import poster from '@/components/poster.vue'
 
 export default {
